@@ -15,6 +15,12 @@ const ArtistSchema = new Schema({
   albums: [AlbumSchema]
 });
 
+// Just for testing middleware scenario
+ArtistSchema.pre('findOneAndRemove', function(next) {
+  console.log('hi');
+  next();
+});
+
 const Artist = mongoose.model('artist', ArtistSchema);
 
 module.exports = Artist;

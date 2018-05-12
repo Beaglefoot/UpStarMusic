@@ -6,5 +6,8 @@ const Artist = require('../models/artist');
  * @param {object} artistProps - An object with a name, age, yearsActive, and genre
  * @return {promise} A promise that resolves when the record is edited
  */
-module.exports = (_id, artistProps) => {
-};
+
+// This will merge artistProps with already existing
+// artist document
+module.exports = (_id, artistProps) =>
+  Artist.findByIdAndUpdate(_id, artistProps);
