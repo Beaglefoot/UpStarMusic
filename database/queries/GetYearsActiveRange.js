@@ -5,5 +5,11 @@ const Artist = require('../models/artist');
  * @return {promise} A promise that resolves with an object
  * containing the min and max yearsActive, like { min: 0, max: 14 }.
  */
-module.exports = () => {
-};
+module.exports = () =>
+  Promise.all(
+    ['yearsActive', '-yearsActive'].map(field =>
+      Artist.find()
+        .sort(field)
+        .limit(1)
+    )
+  ).then(([[{ yearsActive: min }], [{ yearsActive: max }]]) => ({ min, max }));

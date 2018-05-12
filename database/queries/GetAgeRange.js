@@ -5,5 +5,11 @@ const Artist = require('../models/artist');
  * @return {promise} A promise that resolves with an object
  * containing the min and max ages, like { min: 16, max: 45 }.
  */
-module.exports = () => {
-};
+module.exports = () =>
+  Promise.all(
+    ['age', '-age'].map(field =>
+      Artist.find()
+        .sort(field)
+        .limit(1)
+    )
+  ).then(([[{ age: min }], [{ age: max }]]) => ({ min, max }));
