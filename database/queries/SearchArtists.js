@@ -10,7 +10,9 @@ const Artist = require('../models/artist');
  */
 module.exports = (criteria, sortProperty, offset = 0, limit = 20) => {
   const propAlterations = {
-    name: name => name && { name: { $regex: name, $options: 'i' } },
+    // Collection must have text index for $text query.
+    // https://docs.mongodb.com/manual/core/index-text/
+    name: name => name && { $text: { $search: name } },
     age: ({ min, max }) => ({ age: { $gte: min, $lte: max } }),
     yearsActive: ({ min, max }) => ({
       yearsActive: { $gte: min, $lte: max }
