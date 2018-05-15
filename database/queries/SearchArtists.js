@@ -24,9 +24,17 @@ module.exports = (criteria, sortProperty, offset = 0, limit = 20) => {
     {}
   );
 
-  return Artist.find(query)
-    .sort(sortProperty)
-    .skip(offset)
-    .limit(limit)
-    .then(artists => ({ all: artists, count: artists.length, offset, limit }));
+  // There is no way to .count() as well in a single query
+  return Promise.all([
+    Artist.find(query)
+      .sort(sortProperty)
+      .skip(offset)
+      .limit(limit),
+    Artist.find(query).count()
+  ]).then(([artists, count]) => ({
+    all: artists,
+    count,
+    offset,
+    limit
+  }));
 };
